@@ -33,8 +33,7 @@ def generate_noise_image(content_image, noise_ratio):
             int(CONFIG['COLOR_CHANNELS']),
         )).astype('float32')
     
-    # Set the input_image to be a weighted average of the content_image
-    # and a noise_image
+    # Set to be a weighted average of the content_image and noise_image
     input_image = noise_image * noise_ratio + content_image * (1 - noise_ratio)
     
     return input_image

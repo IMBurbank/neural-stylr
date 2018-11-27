@@ -284,7 +284,6 @@ def transfer_style(sess,
             logging.info("content cost = " + str(Jc))
             logging.info("style cost = " + str(Js))
             
-            # save current generated image to the 'output_img_dir'
             save_image(
                 os.path.join(
                     output_img_dir,
@@ -325,23 +324,15 @@ def main(unparsed_args=None):
     style_image = Image.open(args.style_image)
     style_image = resize_and_crop_image(style_image)
     style_image = reshape_and_normalize_image(style_image)
-
     generated_image = generate_noise_image(content_image, args.noise_ratio)
     model = load_vgg_model(args.input_model)
-
-    # Assign the content image to be the input of the VGG model
+    
     sess.run(model['input'].assign(content_image))
 
-    # Select the out layer to use for generated image
     out = model[args.output_layer]
-
-    # Set a_C to be the hidden layer activation from the out layer
     a_C = sess.run(out)
-
-    # Set a_G to be the hidden layer activation from same layer
     a_G = out
 
-    # Assign the input of the model to be the "style" image 
     sess.run(model['input'].assign(style_image))
 
     J_content = compute_content_cost(a_C, a_G)
