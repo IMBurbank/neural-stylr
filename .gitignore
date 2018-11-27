@@ -5,11 +5,15 @@
 __pycache__
 
 */images/input/*
+!*/images/input/README.md
 !*/images/input/default-*
 
 */images/output/*
+!*/images/output/README.md
+
 */logs/*
 */pretrained/*
+!*/pretrained/README.md
 
 assets/*
 !assets/examples
