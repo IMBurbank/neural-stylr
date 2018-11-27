@@ -3,6 +3,7 @@ import glob
 import logging
 import os
 import shutil
+import sys
 import tempfile
 import time
 import numpy as np
@@ -24,7 +25,14 @@ def parse_args(unparsed_args=None):
     Returns:
     args: Parsed arguments
     """
-    parser = argparse.ArgumentParser()
+    class MyParser(argparse.ArgumentParser):
+        def error(self, message):
+            sys.stderr.write('error: %s\n' % message)
+            self.print_help(sys.stderr)
+            sys.exit(1)
+
+    parser = MyParser(
+        description='Neural-style transfer using pretrained model vgg-19.')
 
     parser.add_argument(
         '-t',
@@ -198,8 +206,8 @@ def compute_style_cost(sess, model, style_profile):
     """Compute total style cost for chosen layers.
     
     Args:
-    sess: tensorflow session
-    model: tensorflow model
+    sess: Tensorflow session
+    model: Tensorflow model
     style_profile: A python list containing:
         - the names of the layers we would like to extract style from
         - a coefficient for each of them
@@ -223,8 +231,8 @@ def total_cost(J_content, J_style, alpha = 10, beta = 40):
     """Compute total cost.
     
     Args:
-    J_content: Tensor representing content cost
-    J_style: Tensor representing style cost
+    J_content: tensor representing content cost
+    J_style: tensor representing style cost
     alpha: int hyperparameter weighting the importance of the content cost
     beta: int hyperparameter weighting the importance of the style cost
     
@@ -248,12 +256,12 @@ def transfer_style(sess,
                    output_img_base='img-xxxx'):
     """Run vgg-19 model to generate a NST image.
 
-    args:
+    Args:
     sess: Tensorflow session
     model: Tensorflow model
-    J_content: Tensor representing content cost
-    J_style: Tensor representing style cost
-    J_total: Tensor representing total cost
+    J_content: tensor representing content cost
+    J_style: tensor representing style cost
+    J_total: tensor representing total cost
     input_image: Numpy array of an image
     num_iterations: int number of style-transfer steps
     log_interval: Log interval for metrics and saving intermediate images
