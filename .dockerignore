@@ -1,0 +1,5 @@
+.cache
+.git
+.deploy
+__pycache__
+.ipynb_checkpoints
