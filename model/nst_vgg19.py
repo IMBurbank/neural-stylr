@@ -1,4 +1,3 @@
-import argparse
 import glob
 import logging
 import os
@@ -9,131 +8,12 @@ import time
 import numpy as np
 import tensorflow as tf
 from PIL import Image
-from utils_img import *
-from utils_vgg19 import *
+from utils.base import parse_args
+from utils.image import *
+from utils.model_vgg19 import *
 
 
 STYLE_LAYERS = ['conv1_1', 'conv2_1', 'conv3_1', 'conv4_1', 'conv5_1']
-
-
-def parse_args(unparsed_args=None):
-    """Parse input arguments.
-
-    Args:
-    unparsed_args: Unparsed arguments to add to args
-
-    Returns:
-    args: Parsed arguments
-    """
-    class MyParser(argparse.ArgumentParser):
-        def error(self, message):
-            sys.stderr.write('error: %s\n' % message)
-            self.print_help(sys.stderr)
-            sys.exit(1)
-
-    parser = MyParser(
-        description='Neural-style transfer using pretrained model vgg-19.')
-
-    parser.add_argument(
-        '-t',
-        '--train_steps',
-        type=int,
-        default=200,
-        help='Number of training steps. Default: 200')
-
-    parser.add_argument(
-        '-i',
-        '--log_interval',
-        type=int,
-        default=20,
-        help='Log metrics and save output image on interval. Default: 20')
-
-    parser.add_argument(
-        '-r',
-        '--learning_rate',
-        type=float,
-        default=2.0,
-        help='Learning rate. Default: 2.0')
-
-    parser.add_argument(
-        '-a',
-        '--alpha',
-        type=int,
-        default=10,
-        help='Content image weight factor. Default: 10')
-
-    parser.add_argument(
-        '-b',
-        '--beta',
-        type=int,
-        default=40,
-        help='Style image weight factor. Default: 40')
-
-    parser.add_argument(
-        '--noise_ratio',
-        type=float,
-        default=0.6,
-        help='Random noise ratio in generated image. Default: 0.6')
-
-    parser.add_argument(
-        '-w',
-        '--style_weights',
-        nargs=5,
-        type=float,
-        default=[0.2, 0.2, 0.2, 0.2, 0.2],
-        help='Layer style weights. Default: 0.2 0.2 0.2 0.2 0.2')
-
-    parser.add_argument(
-        '-l',
-        '--output_layer',
-        type=str,
-        default='conv4_2',
-        help='Layer to use for genreated image output. Default: conv4_2')
-
-    parser.add_argument(
-        '-m',
-        '--input_model',
-        type=str,
-        default='pretrained/imagenet-vgg-verydeep-19.mat',
-        help='File path to the input model.')
-
-    parser.add_argument(
-        '-c',
-        '--content_image',
-        type=str,
-        default='images/input/default-content-image.png',
-        help='File path to the input content image.')
-
-    parser.add_argument(
-        '-s',
-        '--style_image',
-        type=str,
-        default='images/input/default-style-image.png',
-        help='File path to the input style  image.')
-
-    parser.add_argument(
-        '-n',
-        '--img_base_name',
-        type=str,
-        default='img',
-        help='Output image base name. Default: img')
-
-    parser.add_argument(
-        '-o',
-        '--output_img_dir',
-        type=str,
-        default='images/output/',
-        help='File path to the input style image. Default: images/output/')
-
-    parser.add_argument(
-        '-d',
-        '--drop_intermediate_images',
-        action='store_true',
-        help='Only save final generated image. Boolean toggle.')
-
-    args = parser.parse_args(unparsed_args)
-
-    return args
 
 
 def compute_content_cost(a_C, a_G):
@@ -297,9 +177,7 @@ def transfer_style(sess,
     return generated_image
 
 
-def main(unparsed_args=None):
-    args = parse_args(unparsed_args)
-
+def main(args=None):
     logging.basicConfig(
         level=logging.INFO,
         format=('%(levelname)s|%(asctime)s'
@@ -307,6 +185,10 @@ def main(unparsed_args=None):
         datefmt='%Y-%m-%dT%H:%M:%S',)
     logging.getLogger().setLevel(logging.INFO)
     logging.info(args)
+
+    if args is None:
+        logging.error('Error: Model requires args.')
+        sys.exit(1)
 
     timestamp = int(time.time())
     output_img_base = '{}-{}'.format(args.img_base_name, timestamp)
@@ -325,8 +207,8 @@ def main(unparsed_args=None):
     style_image = resize_and_crop_image(style_image)
     style_image = reshape_and_normalize_image(style_image)
     generated_image = generate_noise_image(content_image, args.noise_ratio)
-    model = load_vgg_model(args.input_model)
-    
+    model = load_vgg_model(args.pretrained_model)
+
     sess.run(model['input'].assign(content_image))
 
     out = model[args.output_layer]
@@ -373,4 +255,5 @@ def main(unparsed_args=None):
 
 
 if __name__ == '__main__':
-    main()
+    args = parse_args()
+    main(args)
