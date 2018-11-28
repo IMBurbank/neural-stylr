@@ -12,55 +12,61 @@ CONFIG = conf['vgg-19']
 def load_vgg_model(path):
     """Load vgg-19 model graph.
 
-    Returns a model for the purpose of 'painting' the picture.
+    A model for the purpose of 'painting' the picture.
     Takes only the convolution layer weights and wrap using the TensorFlow
     Conv2d, Relu and AveragePooling layer. VGG actually uses maxpool but
     the paper indicates that using AveragePooling yields better results.
     The last few fully connected layers are not used.
-    Here is the detailed configuration of the VGG model:
-        0 is conv1_1 (3, 3, 3, 64)
-        1 is relu
-        2 is conv1_2 (3, 3, 64, 64)
-        3 is relu    
-        4 is maxpool
-        5 is conv2_1 (3, 3, 64, 128)
-        6 is relu
-        7 is conv2_2 (3, 3, 128, 128)
-        8 is relu
-        9 is maxpool
-        10 is conv3_1 (3, 3, 128, 256)
-        11 is relu
-        12 is conv3_2 (3, 3, 256, 256)
-        13 is relu
-        14 is conv3_3 (3, 3, 256, 256)
-        15 is relu
-        16 is conv3_4 (3, 3, 256, 256)
-        17 is relu
-        18 is maxpool
-        19 is conv4_1 (3, 3, 256, 512)
-        20 is relu
-        21 is conv4_2 (3, 3, 512, 512)
-        22 is relu
-        23 is conv4_3 (3, 3, 512, 512)
-        24 is relu
-        25 is conv4_4 (3, 3, 512, 512)
-        26 is relu
-        27 is maxpool
-        28 is conv5_1 (3, 3, 512, 512)
-        29 is relu
-        30 is conv5_2 (3, 3, 512, 512)
-        31 is relu
-        32 is conv5_3 (3, 3, 512, 512)
-        33 is relu
-        34 is conv5_4 (3, 3, 512, 512)
-        35 is relu
-        36 is maxpool
-        37 is fullyconnected (7, 7, 512, 4096)
-        38 is relu
-        39 is fullyconnected (1, 1, 4096, 4096)
-        40 is relu
-        41 is fullyconnected (1, 1, 4096, 1000)
-        42 is softmax
+
+    Args:
+    path: str path to pretrained model
+
+    Returns:
+    graph: VGG19 model graph with layer configuration
+        Layers
+            0:  conv1_1 (3, 3, 3, 64)
+            1:  relu
+            2:  conv1_2 (3, 3, 64, 64)
+            3:  relu    
+            4:  maxpool
+            5:  conv2_1 (3, 3, 64, 128)
+            6:  relu
+            7:  conv2_2 (3, 3, 128, 128)
+            8:  relu
+            9:  maxpool
+            10: conv3_1 (3, 3, 128, 256)
+            11: relu
+            12: conv3_2 (3, 3, 256, 256)
+            13: relu
+            14: conv3_3 (3, 3, 256, 256)
+            15: relu
+            16: conv3_4 (3, 3, 256, 256)
+            17: relu
+            18: maxpool
+            19: conv4_1 (3, 3, 256, 512)
+            20: relu
+            21: conv4_2 (3, 3, 512, 512)
+            22: relu
+            23: conv4_3 (3, 3, 512, 512)
+            24: relu
+            25: conv4_4 (3, 3, 512, 512)
+            26: relu
+            27: maxpool
+            28: conv5_1 (3, 3, 512, 512)
+            29: relu
+            30: conv5_2 (3, 3, 512, 512)
+            31: relu
+            32: conv5_3 (3, 3, 512, 512)
+            33: relu
+            34: conv5_4 (3, 3, 512, 512)
+            35: relu
+            36: maxpool
+            37: fullyconnected (7, 7, 512, 4096)
+            38: relu
+            39: fullyconnected (1, 1, 4096, 4096)
+            40: relu
+            41: fullyconnected (1, 1, 4096, 1000)
+            42: softmax
     """
     vgg = scipy.io.loadmat(path)
     vgg_layers = vgg['layers']
@@ -110,7 +116,8 @@ def load_vgg_model(path):
             1,
             int(CONFIG['IMAGE_HEIGHT']),
             int(CONFIG['IMAGE_WIDTH']),
-            int(CONFIG['COLOR_CHANNELS']))),
+            int(CONFIG['COLOR_CHANNELS'])
+        )),
         dtype = 'float32')
     graph['conv1_1']  = _conv2d_relu(graph['input'], 0, 'conv1_1')
     graph['conv1_2']  = _conv2d_relu(graph['conv1_1'], 2, 'conv1_2')

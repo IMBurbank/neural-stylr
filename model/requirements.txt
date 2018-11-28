@@ -3,4 +3,6 @@ jupyter
 matplotlib
 numpy
 pillow
+pytest
+pyyaml
 scipy

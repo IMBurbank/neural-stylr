@@ -1,23 +1,31 @@
 import glob
-import logging
 import os
 import shutil
 import sys
 import tempfile
 import time
+import yaml
 import numpy as np
 import tensorflow as tf
 from PIL import Image
 from utils.base import parse_args
-from utils.image import *
-from utils.model_vgg19 import *
+from utils.model_vgg19 import load_vgg_model
+from utils.image import (
+    generate_noise_image,
+    resize_and_crop_image,
+    reshape_and_normalize_image,
+    save_image
+)
 
 
+tf.logging.set_verbosity(tf.logging.INFO)
 STYLE_LAYERS = ['conv1_1', 'conv2_1', 'conv3_1', 'conv4_1', 'conv5_1']
+FLAGS = None
+
 
 
 def compute_content_cost(a_C, a_G):
-    """Compute content cost
+    """Compute content cost.
     
     Args:
     a_C: tensor of dimension (1, n_H, n_W, n_C), hidden layer activations
@@ -159,10 +167,10 @@ def transfer_style(sess,
         generated_image = sess.run(model['input'])
         if i % log_interval == 0:
             Jt, Jc, Js = sess.run([J_total, J_content, J_style])
-            logging.info("Iteration " + str(i) + " :")
-            logging.info("total cost = " + str(Jt))
-            logging.info("content cost = " + str(Jc))
-            logging.info("style cost = " + str(Js))
+            tf.logging.info("Iteration " + str(i) + " :")
+            tf.logging.info("total cost = " + str(Jt))
+            tf.logging.info("content cost = " + str(Jc))
+            tf.logging.info("style cost = " + str(Js))
             
             save_image(
                 os.path.join(
@@ -177,25 +185,22 @@ def transfer_style(sess,
     return generated_image
 
 
-def main(args=None):
-    logging.basicConfig(
-        level=logging.INFO,
-        format=('%(levelname)s|%(asctime)s'
-                '|%(pathname)s|%(lineno)d| %(message)s'),
-        datefmt='%Y-%m-%dT%H:%M:%S',)
-    logging.getLogger().setLevel(logging.INFO)
-    logging.info(args)
+def main(args=None, argv=sys.argv):
+    tf.logging.info(args)
 
     if args is None:
-        logging.error('Error: Model requires args.')
-        sys.exit(1)
+        if FLAGS is not None:
+            args = FLAGS
+        else:
+            tf.logging.error('Error: Model requires args.')
+            sys.exit(1)
+
+    if not os.path.exists(args.output_img_dir):
+        os.makedirs(args.output_img_dir)
 
     timestamp = int(time.time())
     output_img_base = '{}-{}'.format(args.img_base_name, timestamp)
     style_profile = list(zip(STYLE_LAYERS, args.style_weights))
-
-    if not os.path.exists(args.output_img_dir):
-        os.makedirs(args.output_img_dir)
 
     tf.reset_default_graph()
     sess = tf.InteractiveSession()
@@ -238,22 +243,26 @@ def main(args=None):
                 output_img_dir=tmpdir,
                 output_img_base=output_img_base)
         except OSError as err:
-            logging.error(str(err))
+            tf.logging.error(str(err))
         finally:
+            img_dir = os.path.join(args.output_img_dir, output_img_base)
             if args.drop_intermediate_images:
                 output_images = glob.glob(tmpdir + '*.png')
                 latest_image = max(output_images, key=os.path.getctime)
+                os.makedirs(img_dir)
                 shutil.copy2(
                     os.path.join(tmpdir, latest_image),
                     os.path.join(args.output_img_dir, latest_image))
             else:
-                shutil.copytree(
-                    tmpdir,
-                    os.path.join(args.output_img_dir, output_img_base))
+                shutil.copytree(tmpdir, img_dir)
 
-    logging.info('Neural-style transfer complete.')
+    yaml_stream = open(os.path.join(img_dir, 'config.yaml'), 'w')
+    yaml.dump(args, yaml_stream)
+    tf.logging.info(
+        'Neural-style transfer complete. Image(s) transferred to {}'.format(
+            img_dir))
 
 
 if __name__ == '__main__':
-    args = parse_args()
-    main(args)
+    FLAGS, unparsed = parse_args()
+    tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
