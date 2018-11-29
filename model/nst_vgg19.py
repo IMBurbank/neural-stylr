@@ -1,3 +1,6 @@
+"""
+NST model using imagenet-vgg-verydeep-19
+"""
 import glob
 import os
 import shutil

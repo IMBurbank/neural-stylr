@@ -1,3 +1,8 @@
+"""
+Base utils.
+
+Core stylr utility functions for main program.
+"""
 import argparse
 import sys
 
@@ -37,8 +42,8 @@ def parse_args():
         '-r',
         '--learning_rate',
         type=float,
-        default=2.0,
-        help='Learning rate. Default: 2.0')
+        default=2.5,
+        help='Learning rate. Default: 2.5')
     parser.add_argument(
         '-a',
         '--alpha',
@@ -81,7 +86,8 @@ def parse_args():
         '--pretrained_model',
         type=str,
         default='pretrained/imagenet-vgg-verydeep-19.mat',
-        help='File path to the input pretained model.')
+        help=('File path to the input pretained model. '
+            + 'Default: pretrained/imagenet-vgg-verydeep-19.mat'))
     parser.add_argument(
         '-c',
         '--content_image',
@@ -93,7 +99,8 @@ def parse_args():
         '--style_image',
         type=str,
         default='images/input/picasso-figures-at-the-seaside-1931-small.jpg',
-        help='File path to the input style  image.')
+        help=('File path to the input style  image. Default: '
+            + 'images/input/picasso-figures-at-the-seaside-1931-small.jpg'))
     parser.add_argument(
         '-n',
         '--img_base_name',
@@ -110,7 +117,7 @@ def parse_args():
         '-d',
         '--drop_intermediate_images',
         action='store_true',
-        help='Only save final generated image. Boolean toggle.')
+        help='Only save final generated image. `bool` toggle. Default: False')
 
     FLAGS, unparsed = parser.parse_known_args()
 

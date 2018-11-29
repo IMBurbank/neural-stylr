@@ -1,6 +1,13 @@
 .cache
 .git
-.deploy
-__pycache__
 .ipynb_checkpoints
 .vscode
+
+__pycache__
+
+images/output/*
+images/output/README.md
+
+foo.*
+bar.*
+baz.*

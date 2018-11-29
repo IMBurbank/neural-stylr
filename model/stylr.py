@@ -1,3 +1,8 @@
+"""
+Neural-Stylr
+
+Main program. Run to apply NST to a content image.
+"""
 import importlib
 import sys
 import tensorflow as tf
@@ -5,8 +10,7 @@ from utils.base import parse_args
 
 
 def main(argv):
-    model = importlib.import_module(FLAGS.model)
-    
+    model = importlib.import_module(FLAGS.model) 
     model.main(FLAGS, argv)
 
 

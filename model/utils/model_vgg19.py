@@ -1,3 +1,8 @@
+"""
+Load Vgg19 Model Util
+
+Functions to load imagenet-vgg-verydeep-19.mat model.
+"""
 import configparser
 import scipy.io
 import numpy as np
