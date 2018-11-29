@@ -2,6 +2,8 @@
 
 Neural-style transfer [(NST)](https://arxiv.org/pdf/1508.06576v2.pdf) algorithm implementation using Tensorflow.
 
+![](assets/examples/painted-fox/painted-fox.png)
+
 ## Using Neural-Stylr
 
 Neural-stylr can be run with this project, or by running a demo Docker image.
