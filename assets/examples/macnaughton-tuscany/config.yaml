@@ -1,0 +1,16 @@
+!!python/object:argparse.Namespace
+alpha: 5
+beta: 25
+content_image: images/input/tuscany-small.jpg
+drop_intermediate_images: true
+img_base_name: img
+learning_rate: 2.0
+log_interval: 20
+model: nst_vgg19
+noise_ratio: 0.2
+output_img_dir: images/output/
+output_layer: conv4_2
+pretrained_model: pretrained/imagenet-vgg-verydeep-19.mat
+style_image: images/input/mk-macnaughton-lunch-break-with-copter-peak-2012-small.jpg
+style_weights: [0.05, 0.05, 0.3, 0.4, 0.2]
+train_steps: 200

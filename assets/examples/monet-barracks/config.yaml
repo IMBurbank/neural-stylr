@@ -1,0 +1,16 @@
+!!python/object:argparse.Namespace
+alpha: 20
+beta: 40
+content_image: images/input/old-military-complex-small.JPG
+drop_intermediate_images: false
+img_base_name: img
+learning_rate: 2.0
+log_interval: 20
+model: nst_vgg19
+noise_ratio: 0.1
+output_img_dir: images/output/
+output_layer: conv4_2
+pretrained_model: pretrained/imagenet-vgg-verydeep-19.mat
+style_image: images/input/monet-autumn-effect-at-argenteuil-1873-small.jpg
+style_weights: [0.2, 0.2, 0.2, 0.2, 0.2]
+train_steps: 200

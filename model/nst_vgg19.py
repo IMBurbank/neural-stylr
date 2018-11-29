@@ -23,7 +23,6 @@ STYLE_LAYERS = ['conv1_1', 'conv2_1', 'conv3_1', 'conv4_1', 'conv5_1']
 FLAGS = None
 
 
-
 def compute_content_cost(a_C, a_G):
     """Compute content cost.
     
@@ -247,12 +246,12 @@ def main(args=None, argv=sys.argv):
         finally:
             img_dir = os.path.join(args.output_img_dir, output_img_base)
             if args.drop_intermediate_images:
-                output_images = glob.glob(tmpdir + '*.png')
+                output_images = glob.glob(os.path.join(tmpdir, '*.png'))
                 latest_image = max(output_images, key=os.path.getctime)
                 os.makedirs(img_dir)
                 shutil.copy2(
                     os.path.join(tmpdir, latest_image),
-                    os.path.join(args.output_img_dir, latest_image))
+                    os.path.join(img_dir))
             else:
                 shutil.copytree(tmpdir, img_dir)
 

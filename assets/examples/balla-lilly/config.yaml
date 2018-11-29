@@ -1,0 +1,16 @@
+!!python/object:argparse.Namespace
+alpha: 20
+beta: 20
+content_image: images/input/water-lily-small.jpg
+drop_intermediate_images: true
+img_base_name: img
+learning_rate: 2.0
+log_interval: 20
+model: nst_vgg19
+noise_ratio: 0.2
+output_img_dir: images/output/
+output_layer: conv4_2
+pretrained_model: pretrained/imagenet-vgg-verydeep-19.mat
+style_image: images/input/giacomo-balla-iridescent-interpenetration-no-4-study-of-light-1912-small.jpg
+style_weights: [0.05, 0.1, 0.2, 0.1, 0.05]
+train_steps: 200

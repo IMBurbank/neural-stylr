@@ -1,0 +1,16 @@
+!!python/object:argparse.Namespace
+alpha: 30
+beta: 40
+content_image: images/input/hummingbird-sphinx-moth-small.jpg
+drop_intermediate_images: false
+img_base_name: img
+learning_rate: 2.5
+log_interval: 20
+model: nst_vgg19
+noise_ratio: 0.25
+output_img_dir: images/output/
+output_layer: conv4_2
+pretrained_model: pretrained/imagenet-vgg-verydeep-19.mat
+style_image: images/input/wassily-kandinsky-romantic-landscape-1911-small.jpg
+style_weights: [0.1, 0.1, 0.1, 0.1, 0.1]
+train_steps: 200

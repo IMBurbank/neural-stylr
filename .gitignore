@@ -5,10 +5,6 @@
 .ipynb_checkpoints
 __pycache__
 
-*/images/input/*
-!*/images/input/README.md
-!*/images/input/default-*
-
 */images/output/*
 !*/images/output/README.md
 

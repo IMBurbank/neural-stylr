@@ -43,8 +43,8 @@ def parse_args():
         '-a',
         '--alpha',
         type=int,
-        default=10,
-        help='Content image weight factor. Default: 10')
+        default=20,
+        help='Content image weight factor. Default: 20')
     parser.add_argument(
         '-b',
         '--beta',
@@ -55,8 +55,8 @@ def parse_args():
         '-s',
         '--noise_ratio',
         type=float,
-        default=0.6,
-        help='Random noise ratio in generated image. Default: 0.6')
+        default=0.4,
+        help='Random noise ratio in generated image. Default: 0.4')
     parser.add_argument(
         '-w',
         '--style_weights',
@@ -86,13 +86,13 @@ def parse_args():
         '-c',
         '--content_image',
         type=str,
-        default='images/input/default-content-image.png',
+        default='images/input/landscape-log-small.jpg',
         help='File path to the input content image.')
     parser.add_argument(
         '-g',
         '--style_image',
         type=str,
-        default='images/input/default-style-image.png',
+        default='images/input/picasso-figures-at-the-seaside-1931-small.jpg',
         help='File path to the input style  image.')
     parser.add_argument(
         '-n',
