@@ -1,12 +1,12 @@
 # Neural-Stylr
 
-Neural-style transfer [(NST)](https://arxiv.org/pdf/1508.06576v2.pdf) algorithm implementation using Tensorflow.
+Neural-style transfer (NST) [algorithm](https://arxiv.org/pdf/1508.06576v2.pdf) implementation using Tensorflow.
 
-![](assets/examples/painted-fox/painted-fox.png)
+![](assets/examples/picasso-golden-gate-seaside/picasso-golden-gate-seaside.png)
 
 ## Using Neural-Stylr
 
-Neural-stylr can be run with this project, or by running a demo Docker image.
+Neural-stylr can be used by cloning this project, or by running a `demo` Docker image.
 
 ### Setup
 
@@ -45,7 +45,7 @@ Run Docker image.
 # Image is built for gpu-support by default
 ./model/scripts/docker_run_dev.sh
 
-# Add flag -c for to use CPU instead
+# Add flag -c to use CPU instead
 ./model/scripts/docker_run_dev.sh -c
 ```
 
